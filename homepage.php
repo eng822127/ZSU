@@ -8,5 +8,6 @@
 </head>
 <body>
     <h1>hello <?php echo  $_SESSION['name'] ; ?> </h1>
+    <a href="logout.php">logout</a>
 </body>
 </html>

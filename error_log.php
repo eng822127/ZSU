@@ -1,3 +1,3 @@
 <?php
-echo "خطأ في اسم المستخدم أو  كلمة المرور";
+    echo "<p style='color: red;'>Incorrect username or password</p>";
 ?>
