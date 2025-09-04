@@ -9,28 +9,7 @@ if(!$db) {
     echo $db->lastErrorMsg();
 }
 
-if(isset($_POST['Send'])){
-$Name=$_POST["Name"];
-$Email=$_POST["Email"];
-$Phone=$_POST["Phone"]; 
-$Username=$_POST["Username"];
-$Password=$_POST["Password"];
 
-$sql =<<<EOF
-INSERT INTO ACCOUNTES
-(NAME, EMAIL, PHONE, USERNAME, PASSWORD) 
-VALUES('$Name', '$Email',  '$Phone', '$Username', '$Password'); 
-EOF;
-
-$ret = $db->exec($sql);
-if(!$ret){
-    echo $db->lasterrormsg();
-}else{
-    header("location:index.php");
-    exit();
-}
-}
-$db->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,26 +24,59 @@ $db->close();
 <h2>Create Accounte</h2>
 <form method="POST">
     <div class="user-box">
-    <input type="text" name="Name" >
+    <input type="text" name="Name" required>
     <label>Name</label>
     </div>
     <div class="user-box">
-    <input type="Email" name="Email">
+    <input type="Email" name="Email" required>
     <label>Email</label>
     </div>
     <div class="user-box">
-    <input type="Phone" name="Phone">
+    <input type="Phone" name="Phone" required>
     <label>Phone</label>
     </div>
     <div class="user-box">
-    <input type="Username" name="Username">
+    <input type="Username" name="Username" required>
     <label>Username</label>
     </div>
     <div class="user-box">
-    <input type="password" name="Password">
+    <input type="password" name="Password" required>
     <label>Password</label>
     </div>
-    <input type="submit" value="Send" name="Send">
+    <input type="submit" value="Send" name="Send"><br>
+    <?php
+    if(isset($_POST['Send'])){
+$Name=$_POST["Name"];
+$Email=$_POST["Email"];
+$Phone=$_POST["Phone"]; 
+$Username=$_POST["Username"];
+$Password=$_POST["Password"];
+
+$sql =<<<EOF
+SELECT COUNT(USERNAME) FROM ACCOUNTES WHERE USERNAME = '$Username' ;
+EOF;
+
+$COUNT = $db->querySingle($sql);
+if($COUNT>0){
+require_once("Massege/error_reg.php");
+}else{
+$sql =<<<EOF
+INSERT INTO ACCOUNTES
+(NAME, EMAIL, PHONE, USERNAME, PASSWORD) 
+VALUES('$Name', '$Email',  '$Phone', '$Username', '$Password'); 
+EOF;
+
+$ret = $db->exec($sql);
+if(!$ret){
+    echo $db->lasterrormsg();
+}else{
+    header("location:index.php");
+    exit();
+}
+}
+}
+$db->close();
+    ?>
 </form>
 </div>
 </body>

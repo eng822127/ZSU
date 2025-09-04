@@ -40,7 +40,6 @@ if(isset($_POST['Loggin'])){
 $username =$_POST['username'];
 $password =$_POST['password'];
 
-// $hash=password_hash($password,PASSWORD_DEFAULT);
 
 while($row = $ret->fetchArray(SQLITE3_ASSOC)){
     if($username==$row['USERNAME'] && $password==$row['PASSWORD']){
@@ -55,7 +54,7 @@ while($row = $ret->fetchArray(SQLITE3_ASSOC)){
         header("location:homepage.php");
     exit();
     }else{
-        require_once("error_log.php");
+        require_once("Massege/error_log.php");
     }
 }
 }
