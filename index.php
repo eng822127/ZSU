@@ -40,9 +40,8 @@ if(isset($_POST['Loggin'])){
 $username =$_POST['username'];
 $password =$_POST['password'];
 
-
 while($row = $ret->fetchArray(SQLITE3_ASSOC)){
-    if($username==$row['USERNAME'] && $password==$row['PASSWORD']){
+    if($username==$row['USERNAME'] && password_verify($password ,$row['PASSWORD']) ){
         if ($_SERVER["REQUEST_METHOD"]=="POST"){
     if($_POST['username']===$row['USERNAME']){
         $_SESSION['name']=$row['NAME'];
@@ -59,6 +58,8 @@ while($row = $ret->fetchArray(SQLITE3_ASSOC)){
 }
 }
 $db->close();
+require_once("Massege/success_reg.php");
+$_SESSION['success_log'] = 'You have successfully logged in!';
         ?>
     </div>
         <input type="submit" value="Loggin" name="Loggin">

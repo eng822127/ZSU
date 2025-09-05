@@ -1,4 +1,8 @@
-<?php  session_start(); ?>
+<?php  session_start(); 
+require_once("Massege/success_log.php");
+$_SESSION['success_logout'] = 'You have successfully logged out!';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

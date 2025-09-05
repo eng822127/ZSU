@@ -1,5 +1,6 @@
 <?php
 session_start();
+$_SESSION['success_log'] = 'You have successfully logged in!';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +46,7 @@ $password =$_POST['password'];
 
 
 while($row = $ret->fetchArray(SQLITE3_ASSOC)){
-    if($username==$row['USERNAME'] && password_verify($password , $hash)){
+    if($username==$row['USERNAME'] && password_verify($password ,$row['PASSWORD']) ){
         if ($_SERVER["REQUEST_METHOD"]=="POST"){
     if($_POST['username']===$row['USERNAME']){
         $_SESSION['name']=$row['NAME'];
@@ -61,6 +62,7 @@ while($row = $ret->fetchArray(SQLITE3_ASSOC)){
     }
 }
 }
+require_once("Massege/success_logout.php");
 $db->close();
         ?>
     </div>

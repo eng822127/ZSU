@@ -1,4 +1,6 @@
 <?php 
+session_start();
+$_SESSION['success_reg'] = 'User registered successfully!';
 class MyDB extends SQLite3 {
     function __construct() {
         $this->open('ZS.db');
@@ -52,6 +54,7 @@ $Phone=$_POST["Phone"];
 $Username=$_POST["Username"];
 $Password=$_POST["Password"];
 
+$hash_Password=password_hash($Password, PASSWORD_DEFAULT);
 $sql =<<<EOF
 SELECT COUNT(USERNAME) FROM ACCOUNTES WHERE USERNAME = '$Username' ;
 EOF;
@@ -63,7 +66,7 @@ require_once("Massege/error_reg.php");
 $sql =<<<EOF
 INSERT INTO ACCOUNTES
 (NAME, EMAIL, PHONE, USERNAME, PASSWORD) 
-VALUES('$Name', '$Email',  '$Phone', '$Username', '$Password'); 
+VALUES('$Name', '$Email',  '$Phone', '$Username', '$hash_Password'); 
 EOF;
 
 $ret = $db->exec($sql);
