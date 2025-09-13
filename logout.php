@@ -1,6 +1,19 @@
 <?php
+//The beginning of the session
 session_start();
+//Login message
 $_SESSION['success_log'] = 'You have successfully logged in!';
+// contact the database
+        class MyDB extends SQLite3 {
+    function __construct() {
+        $this->open('ZS.db');
+    }
+}
+$db = new MyDB();
+if(!$db) {
+    echo $db->lastErrorMsg();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +21,7 @@ $_SESSION['success_log'] = 'You have successfully logged in!';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/log.css">
-    <title>Document</title>
+    <title>log-out</title>
 </head>
 <body>
     <div class="login-box">
@@ -22,57 +35,52 @@ $_SESSION['success_log'] = 'You have successfully logged in!';
     <input type="password" name="password">
     <label>Password</label>
     <?php
-                echo "If you do not have an account , <a href='create_accounte.php'> create accoumte </a>";
-        class MyDB extends SQLite3 {
-    function __construct() {
-        $this->open('ZS.db');
-    }
-}
-$db = new MyDB();
-if(!$db) {
-    echo $db->lastErrorMsg();
-}
-
-$sql =<<<EOF
-SELECT * FROM ACCOUNTES ;
+                echo "If you do not have an account , <a href='create_accounte.php'> create account </a>";
+// Browse fields from the database and convert field elements to arrays 
+                $sql =<<<EOF
+SELECT * FROM Accounts ;
 EOF;
 
 $ret = $db->query($sql);
 
-if(isset($_POST['Loggin'])){
+if(isset($_POST['Login'])){
 $username =$_POST['username'];
 $password =$_POST['password'];
 
-
-
 while($row = $ret->fetchArray(SQLITE3_ASSOC)){
-    if($username==$row['USERNAME'] && password_verify($password ,$row['PASSWORD']) ){
+//Verify username and password, start a session, and store user data in variables for use within the session
+    if($username==$row['Username'] && password_verify($password ,$row['Password']) ){
         if ($_SERVER["REQUEST_METHOD"]=="POST"){
-    if($_POST['username']===$row['USERNAME']){
-        $_SESSION['name']=$row['NAME'];
-        $_SESSION['email']=$row['EMAIL'];
-        $_SESSION['phone']=$row['PHONE'];
-        $_SESSION['id']=$row['ID'];
+    if($_POST['username']===$row['Username']){
+        $_SESSION['name']=$row['Name'];
+        $_SESSION['email']=$row['Email'];
+        $_SESSION['phone']=$row['Phone'];
+        $_SESSION['id']=$row['Id'];
         }
     }
+// Go to the home page
         header("location:homepage.php");
     exit();
     }else{
+// Invoke username and password error message
         require_once("Massege/error_log.php");
     }
 }
 }
+// Recall successful logout message
 require_once("Massege/success_logout.php");
 $db->close();
         ?>
     </div>
-        <input type="submit" value="Loggin" name="Loggin">
+        <input type="submit" value="Login" name="Login">
 </form>
 </div>
 </body>
 </html>
 
 <?php
+//Dump the session file
 session_unset();
+//Destroy the session file
 session_destroy();
 ?>
